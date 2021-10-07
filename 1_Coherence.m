@@ -126,10 +126,7 @@ hold off
 % assumindo que o tamanho do sinal é fixo.
 % tudo que estou vendo é que mais win dá mais acurácia
 
-clc % limpa comm win
-clf % limpa fig
-clear % limpa mem
-
+clear, clf, clc
 Nvetor = 100; % numero de vetores
 Ni = 1000; % numero de simulações
 NAlliAll = zeros(Ni, Nvetor);
@@ -160,7 +157,6 @@ NAlliAllOfDirectVector03randAmp1000simulacao75vetores = NAlliAll;
 %% Cell(2) As Cell(1) but with Imag(coh)
 
 clc, clf, clear
-
 Nvetor = 75; % numero de vetores
 Ni = 1000; % numero de simulações
 NAlliAll = zeros(Ni, Nvetor);
@@ -192,16 +188,10 @@ NAlliAllOfDirectVectImag1randAmp1000simulacao75vetores = NAlliAll;
 % ver se existe uma constante / proporção clara 
 % entre o ruido no angulo e a curva de decaimento
 
-%%% can load final data %%%
-load('NallsimulationData\Cell3.mat')
-%%%%%%%%%%%%%%%%%%%%%%%%%%%
-clc % limpa comm win
-clf % limpa fig
-clear % limpa mem
-
+clear, clf, clc
 Nvetor = 100; % numero de vetores
 Ni = 1000; % numero de simulações
-Amp = 0.01:0.02:2; % 100 amplitudes de ruido
+Amp = [0.03 .1 .2 .4 .6 .8 1.0 1.2 1.6 2.0]; % 10 amplitudes de ruido
 NAlliAll = zeros(Ni, Nvetor, length(Amp));
 % usar uma seed para os dados randn
 
@@ -220,20 +210,22 @@ for amp = Amp
         end
     end
 end
-toc % Elapsed time is 732.839375 seconds.
+toc
 V = squeeze(var(NAlliAll));
 
 figure(1)
-    for cont = 2:10:100
-    plot(1:100,V(cont,:), 'linew', 2)
+    for cont = 1:10
+    plot(1:100,V(:,cont), 'linew', 2)
     hold on
     end
-    legend('.01', '0.2', '0.4', '0.6', '0.8', ...
-        '1.0', '1.2', '1.4', '1.6', '1.8')
+    legend('.03 0.1', '0.2', '0.4', '0.6', '0.8', ...
+        '1.0', '1.2', '1.6', '2.0')
     hold off
     xlabel('# windows')
     ylabel('Varience')
     title('Noise Influence in Coherence Varience per Number os Windows in Data')
+    
+    save('NallsimulationData\Cell3.mat','Amp','V','NAlliAll')
 
 %% Cell(3) Smothing: moving average by convolution
 
@@ -244,16 +236,16 @@ load('NallsimulationData\Cell3.mat')
 ordem = 5;
 % kernel for moving average
 kernel = ones(1,ordem)/ordem;
-Convol = zeros(100, 100);
-slope = zeros(1,100);
+Convol = zeros(100, 10);
+slope = zeros(1,10);
 lo=1;
 hi=4;
 figure(1)
 subplot(211)
-    for i = 1:100
-        Convol(i,:) = conv(V(i,:),kernel,'same');
+    for i = 1:10
+        Convol(:,i) = conv(V(:,i),kernel,'same');
         slope(i) = (Convol(i,lo)-Convol(i,hi))/(hi-lo+1);
-        plot(1:100,Convol(i,:)), hold on
+        plot(1:100,Convol(:,i)), hold on
         plot(lo:hi,Convol(i,lo:hi),'yo')
     end
     xlim([lo-5 hi+5])
@@ -264,16 +256,16 @@ subplot(212)
     [p, S] = polyfit(Amp,slope,n);
     Y1 = polyval(p,Amp);
     hold on
-    plot(Amp,Y1,'g-','linew',3)
+    plot(Amp,Y1,'g--','linew',3)
     hold off
 
 figure(2)
-    for cont = 2:10:100
-    plot(1:100,Convol(cont,:), 'linew', 2)
+    for cont = 1:10
+    plot(1:100,Convol(:,cont), 'linew', 2)
     hold on
     end
-    legend('.01', '0.2', '0.4', '0.6', '0.8', ...
-        '1.0', '1.2', '1.4', '1.6', '1.8')
+    legend('.03 0.1', '0.2', '0.4', '0.6', '0.8', ...
+        '1.0', '1.2', '1.6', '2.0')
     hold off
     xlim([0 95])
     xlabel('# windows')
@@ -284,10 +276,7 @@ figure(2)
 %% Cell(4) As Cell(1) but changing #Trials
 % Justification of the #Trials by varience stability
 
-clc % limpa comm win
-clf % limpa fig
-clear % limpa mem
-
+clear, clf, clc
 Nvetor = 100; % #vetores
 Ni = 10000; % #simulações
 V = zeros(4,Nvetor);
@@ -493,10 +482,7 @@ ylabel('Varience')
 % cada linha possui um numero diferente de janelas analisadas
 % foi repetida essa analise uma vez para cada coluna
 
-clc % limpa comm win
-clf % limpa fig
-clear % limpa mem
-
+clear, clf, clc
 load('NallsimulationData\NAlliAll15F15FF1segwin1000simulacao75vetores.mat')
 load('NallsimulationData\NAlliAll15F25FF1segwin1000simulacao75vetores.mat')
 load('NallsimulationData\NAlliAll15F25FF2segwin1000simulacao75vetores.mat')
