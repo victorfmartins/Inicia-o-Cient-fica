@@ -355,24 +355,108 @@ P2 = subplot(2,5,[4 5 9 10]);
 
 
 %% plot first epoch lenght point to reach 10%CV as a function of noise
+% run simulation until treshold only!!!!!!!!!!!
+
+clear, clf, clc
+srate = 1000; % in Hz
+dt = 1/srate; % in s
+
+tic
+CVlim = zeros(1,75);
+MI1 = zeros(75,200,100);
+noisevector = 0:0.02:1.5-.02;
+kk = 1;
+while (kk < 75) % mudando a intensidade do ruindo
+
+kk
+if (kk > 1 & CVlim(kk-1) - 2 > 0)
+    jj = CVlim(kk-1) - 2;
+elseif (kk > 50)
+    jj = CVlim(kk-1) + 2;
+else
+    jj = 1;
+end
+
+while (jj < 200) % mudando o tempo maximo
+% if (jj > 1)
+%     jj = CVlim(kk);
+% end
+jj
+t = dt:dt:jj; % in s
+
+%%% Toy Model Creation %%%
+% set sine waves
+nonModAmp = 10; %% should be 13
+slow_modulation_wave = sin(2*pi*7.5*t);
+fast_modulated_wave = sin(2*pi*45*t).*(0.2*(slow_modulation_wave+1)+nonModAmp*0.1);
+
+MI = zeros(1,100);
+for ii = 1:100 % repetindo o calculo 100 para gerar o CV
+% fuse sine waves + noise to create signal
+LFP = slow_modulation_wave + ...
+      fast_modulated_wave  + ...
+      noisevector(kk)*randn(size(t));
+
+%%% Feature Extraction %%%
+% filter the signal for low freq for the phase
+% modulating wave and for higth freq for the amp
+% modulated wave
+phase_freq = eegfilt(LFP,srate,5,10,0,1);
+amp_freq = eegfilt(LFP,srate,30,60,0,1);
+
+% all set to extract respective phases and
+% amplitudes
+phase = angle(hilbert(phase_freq));
+ampenv = abs(hilbert(amp_freq));
+
+clear MeanAmp
+count = 0;
+for phasebin = -180:20:160
+    count = count+1;
+    I = find(phase > deg2rad(phasebin) & ...
+             phase < deg2rad(phasebin+20));
+    MeanAmp(count) = mean(ampenv(I));
+end
+
+% Normalizing to get a deistribution of
+% probability and entropy.
+p = MeanAmp/sum(MeanAmp);
+
+% computing entropy values:
+H = -sum(p.*log(p));
+Hmax = log(length(p));
+
+% computing the MI metric
+MI(ii) = (Hmax-H)/Hmax;
+MI1(kk,jj,ii) = (Hmax-H)/Hmax;
+end
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+mean_MI1 = mean(MI1(kk,jj,:),3);
+std_MI1 = std(MI1(kk,jj,:),0,3);
+CV = (std_MI1./mean_MI1);
+if (CV <= 0.1)
+    CVlim(kk) = jj;
+    break;
+end
+jj = jj + 1;
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+end
+kk = kk + 1;
+end
+toc
+save('C:\Users\VAITA\OneDrive\Avançado\Scientific-Research\PACdata\CVlim', 'CVlim');
+
+
+%% Plot
 
 clear, clc, clf
-load('PACdata\bigA_MI.mat')
-%  kk: noise;
-%  jj: length;
-%  ii: trial;
-
-mean_MI1 = mean(MI1(:,:,:),3);
-std_MI1 = std(MI1(:,:,:),0,3);
-CV = (std_MI1./mean_MI1);
-I = ones(1,6);
-noisevector = [0 0.08 0.16 0.24 0.32 0.4];
-[m, I] = min(abs(CV(:,:)'-0.1));
-I(1) = 0;
-plot(noisevector,I)
+load('PACdata\CVlim.mat')
+noisevector = 0:0.02:1.5-.02;
+plot(noisevector,CVlim)
     xlabel('Noise \sigma')
     ylabel('Epoch Length When Crossing CV < 10% Treshold (s)')
-
+    title('Size of Epoch for CV<10%')
+%     xlim([0 1.5])
 
 %% Effect of epoch length and coupling strength - Figure 3B
 

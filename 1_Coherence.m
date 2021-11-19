@@ -28,6 +28,73 @@
 % uma tarefa curta dura 30s
 % muitos animais são 10 e poucos são 3
 
+%% Definitions
+
+%%% Nolte
+% Let x_i(f) and x_j(f) be the (complex) Fourier
+% transforms of the time series x_i(t) and x_j(t)
+% of channel i and j; respectively. Then the
+% cross-spectrum is defined as
+    S_ij(f) = mean(x_i(f)*conj(x_j(f)))
+% Coherency is now defined as the normalized cross-spectrum:
+    C_ij(f) = S_ij(f)/sqrt(S_ii(f)*S_jj(f))
+% and coherence is defined as the absolute value of coherency
+    Coh = abs(C_ij(f))
+%%% Implementation (by Tort)
+    % for one window:
+    W = hamming(length(t))';
+    K = exp(-1i*2*pi*ff*t);
+    X = 3*sin(2*pi*f*t)+0.3*randn(size(t));
+    Y = 0.5*sin(2*pi*f*t+phi)+0.3*randn(size(t));
+    FX = mean((W.*X).*K); 
+    FY = mean((W.*Y).*K);
+    nFX = FX/abs(FX);
+    nFY = FY/abs(FY);
+    nFXY = nFX*conj(nFY);
+    % joining many windows:
+    % midpoint of the coh at a freq over several windows
+    Cxy = abs(mean(nFXYAll));
+%%% Implementation (by G. Nolte)
+    % For one window (or epoch):
+    phaseLag = deg2rad(pi/2)+0.3*randn;
+    X = sin(2*pi*f.*t)+0.3*randn(size(t));
+    Y = sin(2*pi*f.*t + phaseLag)+0.3*randn(size(t));
+    Fx(nwin,:) = fft(X); % Fx is a matrix over epochs
+    Fy(nwin,:) = fft(Y);
+    % joining every window:
+    % Cross-Spectrum
+    Fxy = mean(Fx.*conj(Fy));
+    Fxx = mean(Fx.*conj(Fx));
+    Fyy = mean(Fy.*conj(Fy));
+    % Normalized Cross-Spectrum
+    C = Fxy./(sqrt((Fxx.*Fyy)));
+    % Coherence
+    Coh = abs(C);
+%%% Vinck
+% Central to the definition of the coherence
+% measure is the mathematical representation of a
+% complex random variable  
+     X_j = r_j*exp(i*theta_j)
+% where j= (1, 2, …, N), N is the number of
+% observations, theta_j is the random relative
+% phase between two signals at a particular
+% frequency-band and r_j is the random
+% non-negative magnitude (usually the product of
+% the channels' magnitudes) that is associated
+% with the relative phase.
+% We define r_j = m_j1*m_j2, wherein m_j1 and m_j2
+% are the respective channels' non-negative magnitudes. 
+% The standard definition of the sample coherence
+% is (sums over j)
+    C = abs(sum(m_j1*m_j2*(i*theta_j))/sqrt(sum(m_j1^2)*sum(m_j2^2)))
+%%% Implementation (?)
+    phaseLag = deg2rad(pi/2)+0.3*randn;
+    X = sin(2*pi*f.*t)+0.3*randn(size(t));
+    Y = sin(2*pi*f.*t + phaseLag)+0.3*randn(size(t));
+    theta = phase(hilbert(X))-phase(hilbert(Y))
+    m_1 = abs(hilbert(X));
+    m_2 = abs(hilbert(Y));
+    C = abs(sum(m_1.*m_2*(i*theta))/sqrt(sum(m_1.^2)*sum(m_2.^2)))
 %% CELL(0) Testando 2 e 3
 % % usando a funcao built-in do matlab **CODIGO DA AULA 6**
 % mscohere % ms = magnitude squared
@@ -46,12 +113,11 @@ dt = 1/srate;
 
 figure(4)
 subplot(211)
-Tmax = 2;
-cont = 0;
-while (Tmax <= 32)
-    Tmax = Tmax*2
-    t = dt:dt:Tmax;
-    cont = cont+1;
+linew = 0;
+Tmax = [4 8 16 32 64];
+for tmax = Tmax
+    t = dt:dt:tmax;
+    linew = linew+1;
 
     % o valor randn add não faz diferença pois ele não 
     % esta mudando over time
@@ -70,15 +136,15 @@ while (Tmax <= 32)
     nfft = 2^16;
     [Cxy F] = mscohere(X,Y,windowlength,overlap,nfft,srate);
     hold on
-    plot(F,Cxy, 'linew', cont/2)
+    plot(F,Cxy, 'linew', linew/2)
     xlabel('Frequency (Hz)')
     ylabel('Coherence')
     xlim([0 20])
     ylim([0 1])
 end
-
-legend('4', '8', '16', '32', '64')
-title('Effect of window quantity')
+% NumberOfWwindow = Tmax*srate/windowlength*(1/overlap) (if overlap!= 0)
+legend('2 (win)','4 (win)','8 (win)','16 (win)','32 (win)')
+title('Effect of window quantity (longer signals)')
 hold off
 
 % %
@@ -89,32 +155,30 @@ srate = 1000;
 dt = 1/srate;
 
 subplot(212)
-Tmax = 64;
-cont = 32;
-contt = 0;
-while (Tmax/cont < 64)
-    t = dt:dt:Tmax;
-    cont = cont/2
-    contt = contt + 1;
+WinLenVector = [16 8 4 2 1];
+cont = 0;
+for winlenMultiplier = WinLenVector
+    t = dt:dt:64;
+    cont = cont + 1;
 
     phi = -deg2rad(90)+0*randn;
     X = 3*sin(2*pi*10*t)+0.3*randn(size(t));
     Y = 0.5*sin(2*pi*10*t+phi)+0.3*randn(size(t));
 
-    windowlength = cont*srate;
+    windowlength = winlenMultiplier*srate;
     overlap = 0;
 
     nfft = 2^16;
     [Cxy F] = mscohere(X,Y,windowlength,overlap,nfft,srate);
     hold on
-    plot(F,Cxy, 'linew', contt/2)
+    plot(F,Cxy, 'linew', cont/2)
     xlabel('Frequency (Hz)')
     ylabel('Coherence')
     xlim([0 20])
     ylim([0 1])
 end
 
-legend('16', '8', '4', '2', '1')
+legend('16 (s)', '8 (s)', '4 (s)', '2 (s)', '1 (s)')
 title('Effect of window size')
 hold off
 
@@ -147,10 +211,13 @@ end
 toc % Elapsed time is 36.704769 seconds.
 
 V = var(NAlliAll);
+CV = std(NAlliAll)./mean(NAlliAll);
 figure(1)
-plot(1:Nvetor,V)
+plot(1:Nvetor,V), %hold on
+% plot(1:Nvetor,CV), hold off
 xlabel('# windows')
 ylabel('Varience')
+% legend('Variance','CV')
 
 NAlliAllOfDirectVector03randAmp1000simulacao75vetores = NAlliAll;
 
@@ -327,7 +394,7 @@ legend('10000','1000','100')
 
 clear, clf, clc
 srate = 1000; f = 15; ff = 25; %[15 25]
-dt = 1/srate; Tmax = 4; t = dt:dt:Tmax;
+dt = 1/srate; Tmax = 1; t = dt:dt:Tmax;
 
 Nvetor = 75; % #vetores
 Ni = 100; % #simulações
