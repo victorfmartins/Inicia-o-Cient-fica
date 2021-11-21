@@ -292,13 +292,13 @@ figure(1)
     ylabel('Varience')
     title('Noise Influence in Coherence Varience per Number os Windows in Data')
     
-    save('NallsimulationData\Cell3.mat','Amp','V','NAlliAll')
+    save('SimulationResults\Coherence.mat\Cell3.mat','Amp','V','NAlliAll')
 
 %% Cell(3) Smothing: moving average by convolution
 
 clear, clc, clf
 %loading V from previews lest code block
-load('NallsimulationData\Cell3.mat')
+load('SimulationResults\Coherence.mat\Cell3.mat')
 % ordem = #points no kernel
 ordem = 5;
 % kernel for moving average
@@ -550,12 +550,12 @@ ylabel('Varience')
 % foi repetida essa analise uma vez para cada coluna
 
 clear, clf, clc
-load('NallsimulationData\NAlliAll15F15FF1segwin1000simulacao75vetores.mat')
-load('NallsimulationData\NAlliAll15F25FF1segwin1000simulacao75vetores.mat')
-load('NallsimulationData\NAlliAll15F25FF2segwin1000simulacao75vetores.mat')
-load('NallsimulationData\NAlliAll15F25FF4segwin1000simulacao75vetores.mat')
-load('NallsimulationData\NAlliAllOfDirectVector1randAmp1000simulacao75vetores.mat')
-load('NallsimulationData\NAlliAllOfDirectVector03randAmp1000simulacao75vetores.mat')
+load('SimulationResults\Coherence.mat\NAlliAll15F15FF1segwin1000simulacao75vetores.mat')
+load('SimulationResults\Coherence.mat\NAlliAll15F25FF1segwin1000simulacao75vetores.mat')
+load('SimulationResults\Coherence.mat\NAlliAll15F25FF2segwin1000simulacao75vetores.mat')
+load('SimulationResults\Coherence.mat\NAlliAll15F25FF4segwin1000simulacao75vetores.mat')
+load('SimulationResults\Coherence.mat\NAlliAllOfDirectVector1randAmp1000simulacao75vetores.mat')
+load('SimulationResults\Coherence.mat\NAlliAllOfDirectVector03randAmp1000simulacao75vetores.mat')
 
 % Variancia das analises
 V = zeros(6,75);
