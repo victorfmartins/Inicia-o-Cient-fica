@@ -8,7 +8,7 @@ I have chosen to work in the analysis of neuro time series from electrode record
 ### Contents
 There are five scripts name coded as <number_metricName>. Each one presents a toy model and its analysis over sample size bias of a given metric. Some of them are followed by analysis of real data recorded by the [Computational Neurophysiology Laboratory](https://tortlab.github.io/) team or taken from public online repositories such as [CRCNS](https://crcns.org/).
 
-SimulationResults folder contains saved data from length computations in order to prevent time consuming recalculations. Each subforder recieved the name of the script that generated the data.
+SimulationResults folder contains saved data from length computations to prevent time consuming recalculations. Each subfolder received the name of the script that generated the data.
 
 DATA.mat contains the real data recorded by the Labs and used in the five main scripts.
 
