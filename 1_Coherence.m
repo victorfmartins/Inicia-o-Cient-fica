@@ -104,14 +104,14 @@
 
 
 %setup
-clear, clc, clf
+clear, clc
 srate = 1000;
 dt = 1/srate;
 % alterar o tamanho da amostra muda a coerencia
 % pois altarea a quantidade de vetores sobre os 
 % quais eu estou computando a media
 
-figure(4)
+h=figure(4); clf; set(h,'WindowStyle','docked')
 subplot(211)
 linew = 0;
 Tmax = [4 8 16 32 64];
@@ -255,9 +255,9 @@ NAlliAllOfDirectVectImag1randAmp1000simulacao75vetores = NAlliAll;
 % ver se existe uma constante / proporção clara 
 % entre o ruido no angulo e a curva de decaimento
 
-clear, clf, clc
+clear, clc
 Nvetor = 100; % numero de vetores
-Ni = 1000; % numero de simulações
+Ni = 10000; % numero de simulações
 Amp = [0.03 .1 .2 .4 .6 .8 1.0 1.2 1.6 2.0]; % 10 amplitudes de ruido
 NAlliAll = zeros(Ni, Nvetor, length(Amp));
 % usar uma seed para os dados randn
@@ -280,13 +280,14 @@ end
 toc
 V = squeeze(var(NAlliAll));
 
-figure(1)
+h=figure(1); clf; set(h,'WindowStyle','docked')
     for cont = 1:10
     plot(1:100,V(:,cont), 'linew', 2)
     hold on
     end
-    legend('.03 0.1', '0.2', '0.4', '0.6', '0.8', ...
-        '1.0', '1.2', '1.6', '2.0')
+    legend('.03 \sigma','0.1 \sigma', '0.2 \sigma', '0.4 \sigma', ...
+        '0.6 \sigma', '0.8 \sigma', '1.0 \sigma', '1.2 \sigma', ...
+        '1.6 \sigma', '2.0 \sigma')
     hold off
     xlabel('# windows')
     ylabel('Varience')
@@ -296,18 +297,18 @@ figure(1)
 
 %% Cell(3) Smothing: moving average by convolution
 
-clear, clc, clf
+clear, clc
 %loading V from previews lest code block
 load('SimulationResults\Coherence.mat\Cell3.mat')
 % ordem = #points no kernel
-ordem = 5;
+ordem = 3;
 % kernel for moving average
 kernel = ones(1,ordem)/ordem;
 Convol = zeros(100, 10);
 slope = zeros(1,10);
 lo=1;
 hi=4;
-figure(1)
+h=figure(1); clf; set(h,'WindowStyle','docked')
 subplot(211)
     for i = 1:10
         Convol(:,i) = conv(V(:,i),kernel,'same');
@@ -326,30 +327,31 @@ subplot(212)
     plot(Amp,Y1,'g--','linew',3)
     hold off
 
-figure(2)
+h=figure(2); clf; set(h,'WindowStyle','docked')
     for cont = 1:10
     plot(1:100,Convol(:,cont), 'linew', 2)
     hold on
     end
-    legend('.03 0.1', '0.2', '0.4', '0.6', '0.8', ...
-        '1.0', '1.2', '1.6', '2.0')
+    legend('.03 \sigma','0.1 \sigma', '0.2 \sigma', '0.4 \sigma', ...
+        '0.6 \sigma', '0.8 \sigma', '1.0 \sigma', '1.2 \sigma', ...
+        '1.6 \sigma', '2.0 \sigma')
     hold off
     xlim([0 95])
     xlabel('# windows')
-    ylabel('Varience')
-    title('Noise Influence in Coherence Varience per Number os Windows in Data')
+    ylabel('Variance')
+    title('Noise Influence in Coherence Variance per Number os Windows in Data')
 
 
 %% Cell(4) As Cell(1) but changing #Trials
 % Justification of the #Trials by varience stability
 
-clear, clf, clc
+clear, clc
 Nvetor = 100; % #vetores
 Ni = 10000; % #simulações
 V = zeros(4,Nvetor);
 Ni = Ni*1;
 
-figure(1) % < 1min
+h=figure(1); clf; set(h,'WindowStyle','docked') % < 1min
 for diff = 1:3 % not reliable with 4
     newNi = Ni/(10^diff); % redução no #simulações
     NAlliAll = zeros(newNi, Nvetor);
@@ -549,7 +551,7 @@ ylabel('Varience')
 % cada linha possui um numero diferente de janelas analisadas
 % foi repetida essa analise uma vez para cada coluna
 
-clear, clf, clc
+clear, clc
 load('SimulationResults\Coherence.mat\NAlliAll15F15FF1segwin1000simulacao75vetores.mat')
 load('SimulationResults\Coherence.mat\NAlliAll15F25FF1segwin1000simulacao75vetores.mat')
 load('SimulationResults\Coherence.mat\NAlliAll15F25FF2segwin1000simulacao75vetores.mat')
@@ -566,7 +568,7 @@ V(4, :) = var(NAlliAll15F25FF4segwin1000simulacao75vetores);
 V(5, :) = var(NAlliAllOfDirectVector1randAmp1000simulacao75vetores);
 V(6, :) = var(NAlliAllOfDirectVector03randAmp1000simulacao75vetores);
 
-figure(1)
+h=figure(1); clf; set(h,'WindowStyle','docked')
 for cont = 1:6
 plot(1:75,V(cont,:))
 hold on
@@ -583,7 +585,7 @@ M15F25FF1seg = NAlliAll15F25FF1segwin1000simulacao75vetores;
 M15F25FF2seg = NAlliAll15F25FF2segwin1000simulacao75vetores; 
 M15F25FF4seg = NAlliAll15F25FF4segwin1000simulacao75vetores;
 
-figure(1)
+h=figure(1); clf; set(h,'WindowStyle','docked')
 subplot(2,2,1)
     plot(M15F25FF1seg(20,10:75),M15F25FF2seg(20,10:75),'ko')
     x = M15F25FF1seg(20,10:75);

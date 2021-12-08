@@ -9,7 +9,7 @@
 %% PLI Works
 
 % Setup
-clear, clf, clc
+clear, clc
 srate = 1000; f = 8; % in Hz
 dt = 1/srate; Tmax = 01; t = dt:dt:Tmax; % in Seconds
 N = length(t);
@@ -74,7 +74,7 @@ end
     disp(['PLV = ' num2str(PLV)]);
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-figure(1)
+h=figure(1); clf; set(h,'WindowStyle','docked')
 subplot(2,1,1)
     plot(t,real(RAx))
     hold on
@@ -137,7 +137,7 @@ subplot(2,1,2)
 % gives low PLI and PLV as expected
 
 % Setup
-clear, clf, clc
+clear, clc
 srate = 1000; % in Hz
 dt = 1/srate; Tmax = 3; t = dt:dt:Tmax; % in Seconds
 N = length(t);
@@ -157,7 +157,8 @@ DeltaPhase = angle(exp(1i*(Angx-Angy))); % recomendado
 R = mean(DeltaPhase);
 disp(rad2deg(abs(R)));
 
-%%% PLI
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% computing the Phase-Lag Index %%%
 if(DeltaPhase>-pi & DeltaPhase<pi)
     disp('PLI calculated with -pi<DeltaPhase<pi')
     above0 = sum(DeltaPhase>0);
@@ -172,14 +173,14 @@ else
     PLI = 0;
     disp('PLI error: DeltaPhase <-pi ou >2*pi')
 end
-    
+
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     % computing the Phase-Locking Value
     PLV = abs(mean(exp(1i*DeltaPhase)));
     disp(['PLV = ' num2str(PLV)]);
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-figure(1)
+h=figure(1); clf; set(h,'WindowStyle','docked')
 subplot(2,1,1)
     plot(t,real(RAx))
     hold on
@@ -210,7 +211,7 @@ subplot(2,1,2)
 
 
 % Setup
-clear, clf, clc, load('LFPprobe.mat')
+clear, clc, load('.\Data.mat\LFPprobe.mat')
 dt = 1/srate; Tmax = 4; t = dt:dt:Tmax; % in Seconds
 N = length(t);
 ff = 9; nyquist = srate/2;
@@ -255,7 +256,7 @@ nwin;
     T(nwin) = nwin; 
 end
 
-figure(1)
+h=figure(1); clf; set(h,'WindowStyle','docked')
 subplot(3,1,1)
     plot(t,real(RAx))
     hold on
@@ -288,7 +289,7 @@ subplot(3,1,3)
 %% noisy sine waves >>> Sensible to Noise
 
 % Setup
-clear, clf, clc
+clear, clc
 srate = 1000; f = 8; % in Hz
 dt = 1/srate; Tmax = 1; t = dt:dt:Tmax; % in Seconds
 N = length(t);
@@ -331,7 +332,7 @@ end
     disp(['PLV = ' num2str(PLV)]);
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-figure(1)
+h=figure(1); clf; set(h,'WindowStyle','docked')
 subplot(2,1,1)
     plot(t,real(RAx))
     hold on

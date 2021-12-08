@@ -251,10 +251,10 @@ subplot(111)
     plot(1:length(MI),mean_MI,'b-','linew',3)
     plot(1:length(MI),mean_MI+1*std_MI,'k--')
     plot(1:length(MI),mean_MI-1*std_MI,'k--'), hold off
-    xlabel('Number of Spikes')
-    ylabel('MI')
+    xlabel('Number of Data Points') %xlabel('Number of Spikes')
+    ylabel('Metric Value') %ylabel('MI')
     axis tight
-    title('Effect of the Quantity of Spikes')
+    title('Effect of the Quantity of Data Points') %title('Effect of the Quantity of Spikes')
 
 % subplot(212)
 %     plot(1:length(CV),CV)
@@ -556,18 +556,18 @@ subplot(414)
     ylabel('PPC','fontsize',20)
     title(['MI_{max} = ' num2str(max(ppc))])
 
-subplot(111)
-    % bar(phasebins,counts,'k')
-    bar([phasebins+pi phasebins+pi+2*pi],...
-        [p p],'k')
-    hold on
-    plot([phi+pi phi+pi+2*pi],[VonMises VonMises]*deg2rad(20),'y-','linew',3)
-    hold off
-    set(gca,'xtick',0:pi/2:4*pi,'XTickLabel',{'0','\pi/2','\pi','3\pi/4,'})
-    xlim([0 4*pi])
-    xlabel('Phase (rad)')
-    ylabel('spk probability')
-    title(['Kappa_{Von Mises} = ' num2str(kappa)],'fontsize',14)
+% subplot(111)
+%     % bar(phasebins,counts,'k')
+%     bar([phasebins+pi phasebins+pi+2*pi],...
+%         [p p],'k')
+%     hold on
+%     plot([phi+pi phi+pi+2*pi],[VonMises VonMises]*deg2rad(20),'y-','linew',3)
+%     hold off
+%     set(gca,'xtick',0:pi/2:4*pi,'XTickLabel',{'0','\pi/2','\pi','3\pi/4,'})
+%     xlim([0 4*pi])
+%     xlabel('Phase (rad)')
+%     ylabel('spk probability')
+%     title(['Kappa_{Von Mises} = ' num2str(kappa)],'fontsize',14)
 
 
 

@@ -310,7 +310,7 @@ end
 end
 end
 toc
-save('C:\Users\VAITA\OneDrive\Avançado\Scientific-Research\PACdata\bigA_MI.mat', 'MI1');
+save('SimulationResults\PAC.mat\bigA_MI.mat', 'MI1');
 % Elapsed time is  1.0258e+03 seconds.
 
     
@@ -318,7 +318,7 @@ save('C:\Users\VAITA\OneDrive\Avançado\Scientific-Research\PACdata\bigA_MI.mat',
 
 clear, clc, clf
 % load('MIa.mat')
-load('PACdata\bigA_MI.mat')
+load('SimulationResults\PAC.mat\bigA_MI.mat')
 %  kk: noise;
 %  jj: length;
 %  ii: trial;
@@ -444,13 +444,13 @@ end
 kk = kk + 1;
 end
 toc
-save('C:\Users\VAITA\OneDrive\Avançado\Scientific-Research\PACdata\CVlim', 'CVlim');
+save('SimulationResults\PAC.mat\CVlim', 'CVlim');
 
 
 %% Plot
 
 clear, clc, clf
-load('PACdata\CVlim.mat')
+load('SimulationResults\PAC.mat\CVlim.mat')
 noisevector = 0:0.02:1.5-.02;
 plot(noisevector,CVlim)
     xlabel('Noise \sigma')
@@ -520,14 +520,14 @@ end
 end
 end
 toc
-save('C:\Users\VAITA\OneDrive\Avançado\Scientific-Research\PACdata\bigB_MI.mat', 'MI2');
+save('SimulationResults\PAC.mat\bigB_MI.mat', 'MI2');
 % Elapsed time is 841.489517 seconds.
  
 
 %% Figure 3B - ploting
 
 clear, clc, clf
-load('PACdata\bigB_MI.mat')
+load('SimulationResults\PAC.mat\bigB_MI.mat')
 %  kk: modAmp;
 %  jj: length;
 %  ii: trial;
@@ -622,7 +622,7 @@ MI2(kk,jj,ii) = (Hmax-H)/Hmax;
 end
 end
 toc
-save('C:\Users\VAITA\OneDrive\Avançado\Scientific-Research\PACdata\nonModAmpEff.mat', 'MI2');
+save('SimulationResults\PAC.mat\nonModAmpEff.mat', 'MI2');
 % Elapsed time is 289.070380 seconds.
 
 %% Plot rate of response to Non Modulation Amplitude
@@ -631,7 +631,7 @@ save('C:\Users\VAITA\OneDrive\Avançado\Scientific-Research\PACdata\nonModAmpEff.
 % Quanto maior a modulação menor é o CV.
 
 clear, clc, clf
-load('PACdata\nonModAmpEff.mat')
+load('SimulationResults\PAC.mat\nonModAmpEff.mat')
 %  kk: modAmp; 1:50
 %  jj: length; 100
 %  ii: trial;  1:100

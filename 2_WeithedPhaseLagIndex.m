@@ -22,7 +22,7 @@ for j = 1:Ntrials
     end
 end
 
-figure(1), clf
+h=figure(1); clf; set(h,'WindowStyle','docked')
     j = 1; % choose trial to plot
     plot(t,squeeze(V(j,1,:)), 'linew', 1); hold on
     plot(t,squeeze(V(j,2,:)), 'linew', 2)
@@ -47,7 +47,7 @@ for j = 1:Ntrials
     S(j,:,:) = A*squeeze(V(j,:,:));
 end
 
-figure(2), clf
+h=figure(2); clf; set(h,'WindowStyle','docked')
     subplot(2,1,1)
     j = 1; % choose trial to plot
     a = [[1     0     1     0     1     0     1     0     1     0];...
@@ -78,7 +78,7 @@ for j = 1:Ntrials
 Y(j,:,:) = fft(squeeze(V(j,:,:))')'/length(t);
 end
 
-figure(3), clf
+h=figure(3); clf; set(h,'WindowStyle','docked')
     F = linspace(0,srate/2,floor(length(t)/2)+1); 
     subplot(4,1,1)
     plot(F,abs(2*squeeze(Y(1,1,1:length(F)))), 'linew', 1); hold on
@@ -114,7 +114,7 @@ Zj = A*squeeze(Y(j,:,:)); % Zj = fft(Sj)
 Z(j,:,:) = Zj; % N x 2 x T
 end
 
-figure(4), clf % FORMA ALTERNATIVA: Zj = fft(Sj)
+h=figure(4); clf; set(h,'WindowStyle','docked')% FORMA ALTERNATIVA: Zj = fft(Sj)
     subplot(2,1,1)
     Zj = A*squeeze(Y(1,:,:));
     plot(F, 2*abs(squeeze(Z(1,1,1:length(F))))); hold on
@@ -141,7 +141,7 @@ Zconj = conj(squeeze(Z(j,2,:)));
 X(j,:) = xcorr(squeeze(Z(j,1,:)),Zconj); % X=R*exp(i*theta),
 end
 
-figure(5), clf
+h=figure(5); clf; set(h,'WindowStyle','docked')
     subplot(2,1,1)
     plot(F, 2*abs(squeeze(Z(1,1,1:length(F))))); hold on
     plot(F, 2*abs(squeeze(Z(1,2,1:length(F))))); hold off
@@ -163,7 +163,7 @@ uncorr = Y1*Y2';
 meancorr = mean(uncorr); %should yeild zero
 soma = sum(uncorr);
 
-figure(6), clf
+h=figure(6); clf; set(h,'WindowStyle','docked')
     plot(1:10,real(meancorr)), hold on
     plot(1:10,real(soma)), hold off
     legend('mean', 'sum')
@@ -198,15 +198,15 @@ WPLI(j) = WPLIj;
 end
 % WPLI = abs(mean(imsg(X))*
 
-figure(6), clf
-plot(freqvector+bandwidth/2,PLVspectrum)
-hold on
-plot(freqvector+bandwidth/2,PLVspectrum.^2)
-hold off
-xlabel('Frequency (Hz)')
-ylabel('PLV')
-legend('PLV','PLV^2')
-title('PLV Spectrum')
+% h=figure(7); clf; set(h,'WindowStyle','docked')
+% plot(freqvector+bandwidth/2,PLVspectrum)
+% hold on
+% plot(freqvector+bandwidth/2,PLVspectrum.^2)
+% hold off
+% xlabel('Frequency (Hz)')
+% ylabel('PLV')
+% legend('PLV','PLV^2')
+% title('PLV Spectrum')
 
 %% Sumarization:
 
@@ -267,7 +267,7 @@ meancorr = mean(uncorr); %should yeild zero
 soma = sum(uncorr);
 
 %{
-figure(1), clf
+h=figure(1); clf; set(h,'WindowStyle','docked')
     j = 1; % choose trial to plot
     plot(t,squeeze(V(j,1,:)), 'linew', 1); hold on
     plot(t,squeeze(V(j,2,:)), 'linew', 2)
@@ -276,7 +276,7 @@ figure(1), clf
     ylabel('Power (\muV)')
     title('Visualization of First 4 Sources of First Trial')
 
-figure(2), clf
+h=figure(2); clf; set(h,'WindowStyle','docked')
     subplot(2,1,1)
     j = 1; % choose trial to plot
     a = [[1     0];...
@@ -287,7 +287,7 @@ figure(2), clf
     Sj4visualisation = sin(2*pi*(1+j-1)*t);
     plot(t,Sj4visualisation)
 
-figure(3), clf
+h=figure(3); clf; set(h,'WindowStyle','docked')
     F = linspace(0,srate/2,floor(length(t)/2)+1); 
     subplot(2,1,1)
     plot(F,abs(2*squeeze(Y(1,1,1:length(F)))), 'linew', 1); hold on
@@ -303,7 +303,7 @@ figure(3), clf
     xlim([0 10])
     xlabel('Frequency (Hz)'), ylabel('Power (\muV)')
     
-figure(4), clf % FORMA ALTERNATIVA: Zj = fft(Sj)
+h=figure(4); clf; set(h,'WindowStyle','docked') % FORMA ALTERNATIVA: Zj = fft(Sj)
     subplot(2,1,1)
     Zj = A*squeeze(Y(1,:,:));
     plot(F, 2*abs(squeeze(Z(1,1,1:length(F))))); hold on
@@ -323,7 +323,7 @@ figure(4), clf % FORMA ALTERNATIVA: Zj = fft(Sj)
     xlabel('Frequency (Hz)'), ylabel('Power (\muV)')
     title('Spectrum via Signal')
 
-figure(5), clf
+h=figure(5); clf; set(h,'WindowStyle','docked')
     subplot(2,1,1)
     plot(F, 2*abs(squeeze(Z(1,1,1:length(F))))); hold on
     plot(F, 2*abs(squeeze(Z(1,2,1:length(F))))); hold off
@@ -336,7 +336,7 @@ figure(5), clf
     % polar(angle(x), abs(x))
     xlim([0 20])
 
-figure(6), clf
+h=figure(6); clf; set(h,'WindowStyle','docked')
     plot(1:2,real(meancorr)), hold on
     plot(1:2,real(soma)), hold off
     legend('mean', 'sum')
@@ -350,7 +350,7 @@ clear, clc
 srate = 1000;
 dt = 1/srate; Tmax = 1; t = dt:dt:Tmax; % in Seconds
 
-Ntrials = 10; % j is a trial
+Ntrials = 100; % j is a trial
 Tsamples = 1*srate; % per trial
 Sensors = 2; % serie temporal de 2 sensores simultaneos por trial
 Ksources = 2; % fontes a serem misturadas para formar os sinais.
@@ -364,8 +364,8 @@ Z = zeros(Ntrials,Sensors,Tsamples); % Z = fft(S)
 X = zeros(Ntrials, 2*Tsamples-1); % X = xcorr(Z)
 
 % Calculations
-for ntrials = 2:Ntrials
-for j = 1:ntrials
+
+for j = 1:Ntrials
     for k = 1:Ksources
         V(j,k,:) = sin(2*pi*(k+10*j-10)*t)+0.1*randn(1,Tsamples);
     end
@@ -383,11 +383,12 @@ PLV = zeros(Ntrials,1);
 PLI = zeros(Ntrials,1);
 WPLI = zeros(Ntrials,1);
 
+for ntrials = 1:Ntrials
 % Calculations
-for j=1:Ntrials
-    Cj = mean(X(j,:))/(mean(abs(squeeze(Z(j,1,:)).^2))*...
-                       mean(abs(squeeze(Z(j,2,:)).^2)));
-    PLVj = mean(exp(1i*angle(X(j,:)))); % usar diff(angle)?
+for j=1:ntrials
+    Cj = abs(mean(X(j,:))/(mean(abs(squeeze(Z(j,1,:)).^2))*...
+                       mean(abs(squeeze(Z(j,2,:)).^2))));
+    PLVj = abs(mean(exp(1i*angle(X(j,:))))); % usar diff(angle)?
     PLIj = abs(mean(sign(imag(X(j,:)))));
     WPLIj = abs(mean(imag(X(j,:))))/mean(abs(imag(X(j,:)))); 
     
@@ -397,12 +398,36 @@ for j=1:Ntrials
     WPLI(j) = WPLIj;
 end
 
-% Plots
-%plot
+allC(ntrials) = mean(C);
+allPLV(ntrials) = mean(PLV);
+allPLI(ntrials) = mean(PLI);
+allWPLI(ntrials) = mean(WPLI);
 
 end
-clear Cj PLVj PLIj WPLIj soma meancorr uncorr Y2 Y1 ...
-    Ksources Sensors Tsamples Ntrials dt j k Tmax srate Zconj
+
+subplot(411)
+    plot(1:Ntrials,allC)
+    xlabel('# of trials')
+    ylabel('C','fontsize',20)
+
+subplot(412)
+    plot(1:Ntrials,allPLV)
+    xlabel('# of trials')
+    ylabel('PLV','fontsize',20)
+
+subplot(413)
+    plot(1:Ntrials,allPLI)
+    xlabel('# of trials')
+    ylabel('PLI','fontsize',20)
+
+% One can see that MI goes linear with PLV^2 and kappa^2 
+subplot(414)
+    plot(1:Ntrials,allWPLI)
+    xlabel('# of trials')
+    ylabel('wPLI','fontsize',20)
+    
+% clear Cj PLVj PLIj WPLIj soma meancorr uncorr Y2 Y1 ...
+%     Ksources Sensors Tsamples Ntrials dt j k Tmax srate Zconj
 
 %% Variando Tsamples
 
